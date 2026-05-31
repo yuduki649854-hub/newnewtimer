@@ -161,19 +161,9 @@ button {
 }
 
 @keyframes blinkRed {
-
-  0% {
-    background: #E10F0F;
-  }
-
-  50% {
-    background: #FFFFFF;
-    color: #E10F0F;
-  }
-
-  100% {
-    background: #E10F0F;
-  }
+  0% { background: #E10F0F; }
+  50% { background: #FFFFFF; color: #E10F0F; }
+  100% { background: #E10F0F; }
 }
 
 .blink-yellow{
@@ -181,41 +171,9 @@ button {
 }
 
 @keyframes blinkYellow{
-
-  0%{
-    background:#FFE11E;
-    color:black;
-  }
-
-  50%{
-    background:white;
-    color:#FFE11E;
-  }
-
-  100%{
-    background:#FFE11E;
-    color:black;
-  }
-}
-  animation: blinkYellow 1s infinite;
-}
-
-@keyframes blinkYellow{
-  0%{
-    background:#FFE11E;
-    color:black;
-  }
-
-  50%{
-    background:white;
-    color:#FFE11E;
-  }
-
-  100%{
-    background:#FFE11E;
-    color:black;
-  }
-}
+  0%{ background:#FFE11E; color:black; }
+  50%{ background:white; color:#FFE11E; }
+  100%{ background:#FFE11E; color:black; }
 }
 
 .waiting-controls {
@@ -232,395 +190,282 @@ button {
   align-items:center;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 20px;
+  color: black;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="top-bar">
+  <button class="settings-button" id="settingsButton">⚙️</button>
+  <button class="settings-button" id="statsButton">📊</button>
 
-  <button class="settings-button" id="settingsButton">
-    ⚙️
-  </button>
+  <div class="status-bar">
+    <div id="waitingCountDisplay">待ち 0組</div>
+    
+    <div class="waiting-controls">
+      <button id="addWaiting">＋</button>
+      <button id="removeWaiting">－</button>
+    </div>
 
-<div class="status-bar">
-
-  <div id="waitingCountDisplay">
-    待ち 0組
-</div>
-  
-  <div class="waiting-controls">
-
-  <button id="addWaiting">
-    ＋
-  </button>
-
-  <button id="removeWaiting">
-    －
-  </button>
-
-</div>
-
- <div id="nextWaitTime">
-  次の待ち時間 : 0分
- </div>
-
-  <div id="runningCount">
-    空席 0
+    <div id="nextWaitTime">次の待ち時間 : 0分</div>
+    <div id="runningCount">空席 0</div>
+    <div id="warningCount">残り20分 0</div>
+    <div id="finishedCount">残り10分 0</div>
   </div>
-
-  <div id="warningCount">
-    残り20分 0
-  </div>
-
-  <div id="finishedCount">
-    残り10分 0
-  </div>
-
-</div>
 </div>
 
 <div class="settings" id="settingsPanel">
-
   <h2>グループ設定</h2>
-
   <div class="group-card">
-
     <h3>グループ1</h3>
-
     <div class="group-inputs">
       <input type="number" id="red-start">
       <input type="number" id="red-end">
     </div>
-
     <input type="color" id="red-color">
-
   </div>
 
   <div class="group-card">
-
     <h3>グループ2</h3>
-
     <div class="group-inputs">
       <input type="number" id="yellow-start">
       <input type="number" id="yellow-end">
     </div>
-
     <input type="color" id="yellow-color">
-
   </div>
 
   <div class="group-card">
-
     <h3>グループ3</h3>
-
     <div class="group-inputs">
       <input type="number" id="green-start">
       <input type="number" id="green-end">
     </div>
-
     <input type="color" id="green-color">
-
   </div>
 
   <div class="group-card">
-
     <h3>グループ4</h3>
-
     <div class="group-inputs">
       <input type="number" id="blue-start">
       <input type="number" id="blue-end">
     </div>
-
     <input type="color" id="blue-color">
-
   </div>
+</div>
 
+<div id="peopleModal" class="modal">
+  <div class="modal-content" style="text-align: center; max-width: 400px;">
+    <h2 id="peopleModalTitle">人数を選択してください</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+      <button class="five-btn" onclick="selectPeople(1)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">1</button>
+      <button class="five-btn" onclick="selectPeople(2)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">2</button>
+      <button class="five-btn" onclick="selectPeople(3)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">3</button>
+      <button class="five-btn" onclick="selectPeople(4)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">4</button>
+      <button class="five-btn" onclick="selectPeople(5)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">5</button>
+      <button class="five-btn" onclick="selectPeople(6)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">6</button>
+      <button class="five-btn" onclick="selectPeople(7)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">7</button>
+      <button class="five-btn" onclick="selectPeople(8)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">8</button>
+      <button class="five-btn" onclick="selectPeople(9)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">9</button>
+    </div>
+    <button class="clear-btn" id="closePeopleModal" style="width: 100%; padding: 12px; font-size:16px;">キャンセル</button>
+  </div>
+</div>
+
+<div id="statsModal" class="modal">
+  <div class="modal-content">
+    <h2>📊 体験人数集計</h2>
+    <div id="statsContent"></div>
+    <button class="clear-btn" id="closeStats" style="width: 100%; padding: 12px; font-size:16px; margin-top: 15px;">
+      閉じる
+    </button>
+  </div>
 </div>
 
 <div class="grid" id="timerGrid"></div>
 
 <script>
 
-const INITIAL_SECONDS = 30 * 60;
+let stats =
+JSON.parse(
+  localStorage.getItem('stats')
+) ||
+{
+  totalGroups: 0,
+  totalPeople: 0,
+  hourly: {}
+};
 
-let waitingCount =
-Number(localStorage.getItem('waitingCount')) || 0;
+const INITIAL_SECONDS = 30 * 60;
+let waitingList = JSON.parse(localStorage.getItem('waitingList')) || [];
+let waitingCount = waitingList.length;
 
 const timers =
-JSON.parse(localStorage.getItem('timers')) || [];
+JSON.parse(localStorage.getItem('timers')) ||
+[];
 
 const groups =
 JSON.parse(localStorage.getItem('groups')) || {
-
-  red: {
-    start: 1,
-    end: 5,
-    color: '#FF5D52'
-  },
-
-  yellow: {
-    start: 6,
-    end: 9,
-    color: '#FFA703'
-  },
-
-  green: {
-    start: 10,
-    end: 14,
-    color: '#4CAF50'
-  },
-
-  blue: {
-    start: 15,
-    end: 17,
-    color: '#3143FF'
-  }
+  red: { start: 1, end: 5, color: '#FF5D52' },
+  yellow: { start: 6, end: 9, color: '#FFA703' },
+  green: { start: 10, end: 14, color: '#4CAF50' },
+  blue: { start: 15, end: 17, color: '#3143FF' }
 };
 
+let currentAction = null; 
+let currentTargetTimer = null;
+
 function saveGroups() {
-
-  localStorage.setItem(
-    'groups',
-    JSON.stringify(groups)
-  );
-
+  localStorage.setItem('groups', JSON.stringify(groups));
   updateButtonColors();
 }
 
 function saveTimers() {
-
-  localStorage.setItem(
-    'timers',
-    JSON.stringify(timers)
-  );
+  localStorage.setItem('timers', JSON.stringify(timers));
 }
 
 function getButtonColor(index) {
-
   for (const key in groups) {
-
     const group = groups[key];
-
-    if (
-      index >= group.start &&
-      index <= group.end
-    ) {
+    if (index >= group.start && index <= group.end) {
       return group.color;
     }
   }
-
   return '#999';
 }
 
 function updateButtonColors() {
-
   for (let i = 1; i <= 17; i++) {
-
-    const button =
-    document.getElementById(`start-${i}`);
-
+    const button = document.getElementById(`start-${i}`);
     if (button) {
-
-      button.style.background =
-      getButtonColor(i);
+      button.style.background = getButtonColor(i);
     }
   }
 }
 
 function getTimerColor(timer) {
-
-  // 待機中
-  if (
-    !timer.running &&
-    timer.seconds === INITIAL_SECONDS
-  ) {
+  if (!timer.running && timer.seconds === INITIAL_SECONDS) {
     return '#4AB3E0';
   }
-
-  // 時間超過後に声かけ済
-  if (
-    timer.seconds < 60 &&
-    timer.voiceChecked
-  ) {
+  if (timer.seconds < 60 && timer.voiceChecked) {
     return '#E10F0F';
   }
-
-  // 5分声かけ済
-  if (
-    timer.seconds <= 360 &&
-    timer.seconds >= 60 &&
-    timer.acknowledged
-  ) {
+  if (timer.seconds <= 360 && timer.seconds >= 60 && timer.acknowledged) {
     return '#FFE11E';
   }
-
-  // 通常動作中
   return '#9E9E9E';
 }
 
 function formatTime(seconds) {
-
   const abs = Math.abs(seconds);
-
-  const mins =
-  String(Math.floor(abs / 60))
-  .padStart(2, '0');
-
-  const secs =
-  String(abs % 60)
-  .padStart(2, '0');
-
-  return seconds < 0
-    ? `-${mins}:${secs}`
-    : `${mins}:${secs}`;
+  const mins = String(Math.floor(abs / 60)).padStart(2, '0');
+  const secs = String(abs % 60).padStart(2, '0');
+  return seconds < 0 ? `-${mins}:${secs}` : `${mins}:${secs}`;
 }
 
 function createTimers() {
-
-  const grid =
-  document.getElementById('timerGrid');
+  const grid = document.getElementById('timerGrid');
 
   if (timers.length === 0) {
-
     for (let i = 1; i <= 17; i++) {
-
       timers.push({
-  id: i,
-  seconds: INITIAL_SECONDS,
-  running: false,
-  acknowledged: false,
-  voiceChecked: false,
-  startedAt: null,
-  endAt: null
-});
+        id: i,
+        seconds: INITIAL_SECONDS,
+        running: false,
+        acknowledged: false,
+        voiceChecked: false,
+        startedAt: null,
+        endAt: null
+      });
     }
-
     saveTimers();
   }
 
   timers.sort((a,b)=>b.id-a.id);
 
   timers.forEach(timer => {
-
-    const card =
-    document.createElement('div');
-
+    const card = document.createElement('div');
     card.className = 'timer-card';
-
     card.id = `card-${timer.id}`;
 
     card.innerHTML = `
-
-      <div class="timer-title">
-        No.${timer.id}
-      </div>
-
-      <div
-        class="time"
-        id="time-${timer.id}">
-        30:00
-      </div>
-
+      <div class="timer-title">No.${timer.id}</div>
+      <div class="time" id="time-${timer.id}">30:00</div>
       <div class="buttons">
-
-        <button
-          id="start-${timer.id}"
-          style="
-            background:
-            ${getButtonColor(timer.id)};
-            color:white;
-          "
-        >
+        <button id="start-${timer.id}" style="background:${getButtonColor(timer.id)}; color:white;">
           ${timer.id}
         </button>
-
-        <button
-          class="five-btn"
-          id="five-${timer.id}">
-          声かけ済
-        </button>
-
-        <button
-          class="clear-btn"
-          id="clear-${timer.id}">
-          クリア
-        </button>
-
+        <button class="five-btn" id="five-${timer.id}">声かけ済</button>
+        <button class="clear-btn" id="clear-${timer.id}">クリア</button>
       </div>
     `;
 
     grid.appendChild(card);
 
-    document
-    .getElementById(`start-${timer.id}`)
-    .onclick = () => {
-
+    document.getElementById(`start-${timer.id}`).onclick = () => {
       if (timer.running) return;
 
-      timer.running = true;
-      
-      if (waitingCount > 0) {
+      if (waitingList.length > 0) {
+        // ★変更：待ちがすでにいる場合は、待ち登録の時点で集計済みなので、ここでは集計をせずただ開始するだけ
+        waitingList.shift();
+        waitingCount = waitingList.length;
+        localStorage.setItem('waitingList', JSON.stringify(waitingList));
+        localStorage.setItem('waitingCount', waitingCount);
+        
+        startTimerOnly(timer);
+      } else {
+        currentAction = 'directStart';
+        currentTargetTimer = timer;
+        document.getElementById('peopleModalTitle').textContent = `No.${timer.id} の体験人数`;
+        document.getElementById('peopleModal').style.display = 'block';
+      }
+    };
 
-  waitingCount--;
-
-  localStorage.setItem(
-    'waitingCount',
-    waitingCount
-  );
-}
-
-      timer.startedAt = Date.now();
-
-      timer.endAt =
-      Date.now() +
-      (timer.seconds * 1000);
-
-      sortTimers();
-
+    document.getElementById(`five-${timer.id}`).onclick = () => {
+      if (!timer.running) return;
+      if (timer.seconds < 60) {
+        timer.voiceChecked = true;
+      } else if (timer.seconds <= 360) {
+        timer.acknowledged = true;
+      }
       saveTimers();
-
       updateCard(timer);
     };
 
-   document
-.getElementById(`five-${timer.id}`)
-.onclick = () => {
-
-  if (timer.seconds <= 60) {
-
-    timer.voiceChecked = true;
-
-  } else {
-
-    timer.acknowledged = true;
-  }
-
-  saveTimers();
-
-  updateCard(timer);
-};
-
-    document
-    .getElementById(`clear-${timer.id}`)
-    .onclick = () => {
-
+    document.getElementById(`clear-${timer.id}`).onclick = () => {
       timer.running = false;
-
       timer.seconds = INITIAL_SECONDS;
-
       timer.acknowledged = false;
-
       timer.voiceChecked = false;
-
       timer.startedAt = null;
-
       timer.endAt = null;
-
-      sortTimers();
-
       saveTimers();
-
+      sortTimers();
       updateCard(timer);
     };
 
@@ -630,311 +475,194 @@ function createTimers() {
   sortTimers();
 }
 
+// ★新しく変更：待ちから案内するとき専用（集計をスキップしてタイマーを回す）
+function startTimerOnly(timer) {
+  timer.running = true;
+  timer.startedAt = Date.now();
+  timer.endAt = Date.now() + (timer.seconds * 1000);
+
+  sortTimers();
+  saveTimers();
+  updateCard(timer);
+}
+
+// ★直接来店したとき専用（その場で集計してタイマーを回す）
+function startTimerWithPeople(timer, peopleCount) {
+  addCountToStats(peopleCount); // 集計に加算
+  startTimerOnly(timer);        // タイマー開始
+}
+
+// ★新しく追加：集計データ（stats）に加算する共通処理
+function addCountToStats(peopleCount) {
+  const nowHour = new Date().getHours();
+  stats.totalGroups = (stats.totalGroups || 0) + 1;
+  stats.totalPeople = (stats.totalPeople || 0) + peopleCount;
+  if (!stats.hourly[nowHour]) {
+    stats.hourly[nowHour] = { groups: 0, people: 0 };
+  }
+  stats.hourly[nowHour].groups++;
+  stats.hourly[nowHour].people += peopleCount;
+  localStorage.setItem('stats', JSON.stringify(stats));
+}
+
+function selectPeople(num) {
+  if (currentAction === 'addWaiting') {
+    // ★変更点：「＋」で待ちを登録した瞬間に、リストに追加すると同時に集計(stats)へカウント！
+    waitingList.push(num);
+    waitingCount = waitingList.length;
+    localStorage.setItem('waitingList', JSON.stringify(waitingList));
+    localStorage.setItem('waitingCount', waitingCount);
+    
+    addCountToStats(num); // 待ち追加の段階で集計へ！
+  } else if (currentAction === 'directStart' && currentTargetTimer) {
+    // 直接来店でタイマー開始の場合（今まで通りその場で集計）
+    startTimerWithPeople(currentTargetTimer, num);
+  }
+  
+  document.getElementById('peopleModal').style.display = 'none';
+  currentAction = null;
+  currentTargetTimer = null;
+  updateStatusCounts();
+}
+
 function sortTimers() {
-
-  const grid =
-  document.getElementById('timerGrid');
-
-  const cards =
-  Array.from(
-    document.querySelectorAll('.timer-card')
-  );
+  const grid = document.getElementById('timerGrid');
+  const cards = Array.from(document.querySelectorAll('.timer-card'));
 
   const runningCards = cards.filter(c => {
-
-    const id =
-    Number(c.id.replace('card-', ''));
-
-    const t =
-    timers.find(timer => timer.id === id);
-
+    const id = Number(c.id.replace('card-', ''));
+    const t = timers.find(timer => timer.id === id);
     return t.running;
   });
 
   const stoppedCards = cards.filter(c => {
-
-    const id =
-    Number(c.id.replace('card-', ''));
-
-    const t =
-    timers.find(timer => timer.id === id);
-
+    const id = Number(c.id.replace('card-', ''));
+    const t = timers.find(timer => timer.id === id);
     return !t.running;
   });
 
   runningCards.sort((a,b)=>{
-
-    const aId =
-    Number(a.id.replace('card-', ''));
-
-    const bId =
-    Number(b.id.replace('card-', ''));
-
-    const aTimer =
-    timers.find(t=>t.id===aId);
-
-    const bTimer =
-    timers.find(t=>t.id===bId);
-
-    return aTimer.startedAt -
-           bTimer.startedAt;
+    const aId = Number(a.id.replace('card-', ''));
+    const bId = Number(b.id.replace('card-', ''));
+    const aTimer = timers.find(t=>t.id===aId);
+    const bTimer = timers.find(t=>t.id===bId);
+    return aTimer.startedAt - bTimer.startedAt;
   });
 
   stoppedCards.sort((a,b)=>{
-
-    const aId =
-    Number(a.id.replace('card-', ''));
-
-    const bId =
-    Number(b.id.replace('card-', ''));
-
+    const aId = Number(a.id.replace('card-', ''));
+    const bId = Number(b.id.replace('card-', ''));
     return bId - aId;
   });
 
-  [...runningCards, ...stoppedCards]
-  .forEach(card=>{
+  [...runningCards, ...stoppedCards].forEach(card=>{
     grid.appendChild(card);
   });
 }
 
 function updateCard(timer) {
+  const card = document.getElementById(`card-${timer.id}`);
+  const time = document.getElementById(`time-${timer.id}`);
+  
+  card.classList.remove('blink-yellow', 'blink-red');
 
-  const card =
-    document.getElementById(`card-${timer.id}`);
-
-  const time =
-    document.getElementById(`time-${timer.id}`);
-
-  card.classList.remove(
-    'blink-yellow',
-    'blink-red'
-  );
-
-  if (
-    timer.seconds <= 360 &&
-    timer.seconds >= 60 &&
-    !timer.acknowledged
-  ) {
-
+  if (timer.seconds <= 360 && timer.seconds >= 60 && !timer.acknowledged) {
     card.classList.add('blink-yellow');
-
-  }
-
-  else if (
-    timer.seconds < 60 &&
-    !timer.voiceChecked
-  ) {
-
+  } else if (timer.seconds < 60 && !timer.voiceChecked) {
     card.classList.add('blink-red');
-
+  } else {
+    card.style.background = getTimerColor(timer);
   }
 
-  else {
-
-    card.style.background =
-      getTimerColor(timer);
-  }
-
-  time.textContent =
-    formatTime(timer.seconds);
+  time.textContent = formatTime(timer.seconds);
 }
 
 function updateStatusCounts() {
+  const stopped = timers.filter(t => !t.running).length;
+  const twentyMinutes = timers.filter(t => t.running && t.seconds <= 1200).length;
+  const tenMinutes = timers.filter(t => t.running && t.seconds <= 600).length;
 
-  // 待機中
-  const stopped =
-    timers.filter(t =>
-      !t.running
-    ).length;
+  document.getElementById('runningCount').textContent = `空席 : ${stopped}`;
+  document.getElementById('warningCount').textContent = `残り20分 : ${twentyMinutes}`;
+  document.getElementById('finishedCount').textContent = `残り10分 : ${tenMinutes}`;
+  document.getElementById('waitingCountDisplay').textContent = `待ち ${waitingCount}組`;
 
-  // 残り20分以内
-  const twentyMinutes =
-    timers.filter(t =>
-      t.running &&
-      t.seconds <= 1200
-    ).length;
+  const activeTimers = timers
+    .filter(t => t.running && t.seconds > 0)
+    .sort((a,b) => a.seconds - b.seconds);
 
-  // 残り10分以内
-  const tenMinutes =
-    timers.filter(t =>
-      t.running &&
-      t.seconds <= 600
-    ).length;
+  let nextWaitMinutes = 0;
 
-  document.getElementById(
-    'runningCount'
-  ).textContent =
-    `空席 : ${stopped}`;
+  if (waitingCount > 0 || (stopped === 0 && activeTimers.length > 0)) {
+    if (activeTimers.length === 0) {
+      nextWaitMinutes = 0;
+    } else {
+      const cycle = Math.floor(waitingCount / activeTimers.length);
+      const position = waitingCount % activeTimers.length;
+      const waitSeconds = activeTimers[position].seconds + (cycle * 1800);
+      nextWaitMinutes = Math.ceil(waitSeconds / 60);
+    }
+  } else {
+    nextWaitMinutes = 0;
+  }
 
-  document.getElementById(
-    'warningCount'
-  ).textContent =
-    `残り20分 : ${twentyMinutes}`;
-
-  document.getElementById(
-    'finishedCount'
-  ).textContent =
-    `残り10分 : ${tenMinutes}`;
-
-  document.getElementById(
-    'waitingCountDisplay'
-  ).textContent =
-    `待ち ${waitingCount}組`;
-
-const activeTimers =
-  timers
-    .filter(t =>
-      t.running &&
-      t.seconds > 0
-    )
-    .sort((a,b) =>
-      a.seconds - b.seconds
-    );
-
-let nextWaitMinutes = 0;
-
-if (activeTimers.length > 0) {
-
-  const cycle =
-    Math.floor(
-      waitingCount /
-      activeTimers.length
-    );
-
-  const position =
-    waitingCount %
-    activeTimers.length;
-
-  const waitSeconds =
-    activeTimers[position].seconds +
-    (cycle * 1800);
-
-  nextWaitMinutes =
-    Math.ceil(
-      waitSeconds / 60
-    );
-}
-
-document.getElementById(
-  'nextWaitTime'
-).textContent =
-  `次の待ち時間 : ${nextWaitMinutes}分`;
+  document.getElementById('nextWaitTime').textContent = `次の待ち時間 : ${nextWaitMinutes}分`;
 }
 
 setInterval(()=>{
-
   timers.forEach(timer=>{
-
     if (timer.running) {
-
       const now = Date.now();
-
-      const remaining =
-      Math.floor(
-        (timer.endAt - now) / 1000
-      );
-
+      const remaining = Math.floor((timer.endAt - now) / 1000);
       timer.seconds = remaining;
-
       updateCard(timer);
     }
   });
-
   saveTimers();
+  updateStatusCounts();
+}, 1000);
 
-updateStatusCounts();
-
-},1000);
-
-document
-.getElementById('settingsButton')
-.onclick = ()=>{
-
-  const panel =
-  document.getElementById('settingsPanel');
-
+document.getElementById('settingsButton').onclick = ()=>{
+  const panel = document.getElementById('settingsPanel');
   if (panel.style.display === 'block') {
-
     panel.style.display = 'none';
-
   } else {
-
     panel.style.display = 'block';
   }
 };
 
 function bindGroupSettings(name) {
+  document.getElementById(`${name}-start`).value = groups[name].start;
+  document.getElementById(`${name}-end`).value = groups[name].end;
+  document.getElementById(`${name}-color`).value = groups[name].color;
 
-  document
-  .getElementById(`${name}-start`)
-  .value = groups[name].start;
-
-  document
-  .getElementById(`${name}-end`)
-  .value = groups[name].end;
-
-  document
-  .getElementById(`${name}-color`)
-  .value = groups[name].color;
-
-  document
-  .getElementById(`${name}-start`)
-  .oninput = (e)=>{
-
-    groups[name].start =
-    Number(e.target.value);
-
+  document.getElementById(`${name}-start`).oninput = (e)=>{
+    groups[name].start = Number(e.target.value);
     saveGroups();
   };
-
-  document
-  .getElementById(`${name}-end`)
-  .oninput = (e)=>{
-
-    groups[name].end =
-    Number(e.target.value);
-
+  document.getElementById(`${name}-end`).oninput = (e)=>{
+    groups[name].end = Number(e.target.value);
     saveGroups();
   };
-
-  document
-  .getElementById(`${name}-color`)
-  .oninput = (e)=>{
-
-    groups[name].color =
-    e.target.value;
-
+  document.getElementById(`${name}-color`).oninput = (e)=>{
+    groups[name].color = e.target.value;
     saveGroups();
   };
 }
 
-document
-.getElementById('addWaiting')
-.onclick = () => {
-
-  waitingCount++;
-
-  localStorage.setItem(
-    'waitingCount',
-    waitingCount
-  );
-
-  updateStatusCounts();
+document.getElementById('addWaiting').onclick = () => {
+  currentAction = 'addWaiting';
+  document.getElementById('peopleModalTitle').textContent = "お待ちになる人数";
+  document.getElementById('peopleModal').style.display = 'block';
 };
 
-document
-.getElementById('removeWaiting')
-.onclick = () => {
+document.getElementById('removeWaiting').onclick = () => {
+  if (waitingList.length > 0) {
+    waitingList.pop();
+    waitingCount = waitingList.length;
 
-  if (waitingCount > 0) {
-
-    waitingCount--;
-
-    localStorage.setItem(
-      'waitingCount',
-      waitingCount
-    );
-
+    localStorage.setItem('waitingList', JSON.stringify(waitingList));
+    localStorage.setItem('waitingCount', waitingCount);
     updateStatusCounts();
   }
 };
@@ -944,10 +672,78 @@ bindGroupSettings('yellow');
 bindGroupSettings('green');
 bindGroupSettings('blue');
 
+document.getElementById('statsButton').onclick = () => {
+  const statsContent = document.getElementById('statsContent');
+  let html = `
+    <p><strong>累計:</strong> ${stats.totalGroups || 0} 組 / ${stats.totalPeople || 0} 人</p>
+    <p style="font-size:14px; color:#666;">（1組あたりの平均: ${stats.totalGroups ? Math.round((stats.totalPeople / stats.totalGroups) * 10) / 10 : 0} 人）</p>
+    <hr>
+    <h3>時間帯別の集計</h3>
+    <table style="width:100%; border-collapse: collapse; margin-top:10px; font-size:15px;">
+      <thead>
+        <tr style="background:#eee; text-align:left;">
+          <th style="padding:8px; border:1px solid #ccc;">時間帯</th>
+          <th style="padding:8px; border:1px solid #ccc;">組数</th>
+          <th style="padding:8px; border:1px solid #ccc;">人数</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  let hasData = false;
+  for (let h = 0; h < 24; h++) {
+    const data = stats.hourly[h];
+    if (data) {
+      hasData = true;
+      const gCount = typeof data === 'number' ? data : (data.groups || 0);
+      const pCount = typeof data === 'number' ? data * 2 : (data.people || 0);
+
+      html += `
+        <tr>
+          <td style="padding:8px; border:1px solid #ccc;">${h}時 〜 ${h+1}時</td>
+          <td style="padding:8px; border:1px solid #ccc;">${gCount} 組</td>
+          <td style="padding:8px; border:1px solid #ccc;">${pCount} 人</td>
+        </tr>
+      `;
+    }
+  }
+
+  if (!hasData) {
+    html += `<tr><td colspan="3" style="padding:8px; border:1px solid #ccc; text-align:center; color:#999;">本日のデータはありません</td></tr>`;
+  }
+
+  html += `
+      </tbody>
+    </table>
+    <button id="resetStats" style="background:#ff4d4d; color:white; margin-top:20px; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">
+      データをリセットする
+    </button>
+  `;
+  statsContent.innerHTML = html;
+
+  document.getElementById('resetStats').onclick = () => {
+    if (confirm('集計データをすべてリセットしますか？')) {
+      stats = { totalGroups: 0, totalPeople: 0, hourly: {} };
+      localStorage.setItem('stats', JSON.stringify(stats));
+      document.getElementById('statsButton').click();
+    }
+  };
+
+  document.getElementById('statsModal').style.display = 'block';
+};
+
+document.getElementById('closeStats').onclick = () => {
+  document.getElementById('statsModal').style.display = 'none';
+};
+
+document.getElementById('closePeopleModal').onclick = () => {
+  document.getElementById('peopleModal').style.display = 'none';
+  currentAction = null;
+  currentTargetTimer = null;
+};
 
 createTimers();
-  updateStatusCounts();
-
+updateStatusCounts();
 </script>
 
 </body>
