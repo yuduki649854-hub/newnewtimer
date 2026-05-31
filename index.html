@@ -36,42 +36,62 @@ body {
 }
 
 .settings-button {
-  width: 60px;
-  height: 60px;
+  width: 46px;
+  height: 46px;
   border:none;
   border-radius:50%;
   background: white;
-  font-size:28px;
+  font-size:20px;
   cursor:pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.status-bar {
-  display:flex;
-  flex-direction:row;
-  gap:14px;
-  align-items:center;
+/* ーー★ここから差し替え★ーー */
+
+/* 上部ステータスバーの全パーツ共通のベースデザイン */
+.status-bar div, #nextWaitTime, .waiting-controls {
+  background: white;
+  height: 46px;                  /* 縦幅を 56px → 46px に少しスマートに */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.status-bar div {
-  background: white;
-  padding: 12px 20px;
-  border-radius: 999px;
+/* 個別の微調整 */
+.status-bar div, #nextWaitTime {
+  padding: 0 14px;               /* 左右の余白を 20px → 14px に狭めて横幅を節約 */
   font-weight: bold;
-  font-size: 24px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 18px;               /* 文字サイズを 24px → 18px にしてiPadに収めます */
   white-space: nowrap;
 }
 
-#nextWaitTime {
-  background: white;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-size: 24px;
-  font-weight: bold;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+/* ＋－ボタンを包む白い枠組み */
+.waiting-controls {
+  padding: 0 6px;                /* 枠内の余白を少し詰めました */
+  gap: 6px;                      /* ＋とーの間のスキマを少し詰めました */
 }
+
+/* ＋とーのボタン自体のデザイン（形や色はそのまま！） */
+.waiting-controls button {
+  width: 34px;                   /* 縦横サイズを 44px → 34px に縮小 */
+  height: 34px;
+  font-size: 20px;               /* ＋－の文字を 24px → 20px に */
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  background: #e5e7eb;           /* 色はそのまま */
+  color: #2563eb;                /* 色はそのまま */
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ーー★ここまでを差し替え★ーー */
+
 
 .settings {
   display: none;
@@ -176,20 +196,6 @@ button {
   100%{ background:#FFE11E; color:black; }
 }
 
-.waiting-controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.waiting-controls button {
-  width: 60px;
-  height: 48px;
-  font-size: 24px;
-  align-items:center;
-}
-
 .modal {
   display: none;
   position: fixed;
@@ -221,11 +227,11 @@ button {
 
 <body>
 
-<div class="top-bar">
-  <button class="settings-button" id="settingsButton">⚙️</button>
-  <button class="settings-button" id="statsButton">📊</button>
+<div class="top-bar" style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; width: 100%; box-sizing: border-box;">
+  <button class="settings-button" id="settingsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">⚙️</button>
+  <button class="settings-button" id="statsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">📊</button>
 
-  <div class="status-bar">
+  <div class="status-bar" style="display: flex; flex-direction: row; gap: 8px; align-items: center; flex-grow: 1; width: auto;">
     <div id="waitingCountDisplay">待ち 0組</div>
     
     <div class="waiting-controls">
@@ -234,11 +240,15 @@ button {
     </div>
 
     <div id="nextWaitTime">次の待ち時間 : 0分</div>
+
+　　  <div style="flex-grow: 1; background: transparent; box-shadow: none; height: auto; padding: 0; margin: 0;"></div>
+
     <div id="runningCount">空席 0</div>
     <div id="warningCount">残り20分 0</div>
     <div id="finishedCount">残り10分 0</div>
   </div>
 </div>
+
 
 <div class="settings" id="settingsPanel">
   <h2>グループ設定</h2>
