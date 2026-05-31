@@ -36,22 +36,27 @@ body {
 }
 
 .settings-button {
-  width: 46px;
-  height: 46px;
+  width: 60px;
+  height: 60px;
   border:none;
   border-radius:50%;
   background: white;
-  font-size:20px;
+  font-size:28px;
   cursor:pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* ーー★ここから差し替え★ーー */
+.status-bar {
+  display:flex;
+  flex-direction:row;
+  gap:14px;
+  align-items:center;
+}
 
 /* 上部ステータスバーの全パーツ共通のベースデザイン */
 .status-bar div, #nextWaitTime, .waiting-controls {
   background: white;
-  height: 46px;                  /* 縦幅を 56px → 46px に少しスマートに */
+  height: 46px;                  /* 縦幅をコンパクトに調整 */
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -61,28 +66,28 @@ body {
 
 /* 個別の微調整 */
 .status-bar div, #nextWaitTime {
-  padding: 0 14px;               /* 左右の余白を 20px → 14px に狭めて横幅を節約 */
+  padding: 0 14px;
   font-weight: bold;
-  font-size: 18px;               /* 文字サイズを 24px → 18px にしてiPadに収めます */
+  font-size: 18px;
   white-space: nowrap;
 }
 
 /* ＋－ボタンを包む白い枠組み */
 .waiting-controls {
-  padding: 0 6px;                /* 枠内の余白を少し詰めました */
-  gap: 6px;                      /* ＋とーの間のスキマを少し詰めました */
+  padding: 0 6px;
+  gap: 6px;
 }
 
-/* ＋とーのボタン自体のデザイン（形や色はそのまま！） */
+/* ＋とーのボタン自体のデザイン */
 .waiting-controls button {
-  width: 34px;                   /* 縦横サイズを 44px → 34px に縮小 */
+  width: 34px;
   height: 34px;
-  font-size: 20px;               /* ＋－の文字を 24px → 20px に */
+  font-size: 20px;
   font-weight: bold;
   border: none;
   border-radius: 50%;
-  background: #e5e7eb;           /* 色はそのまま */
-  color: #2563eb;                /* 色はそのまま */
+  background: #e5e7eb;
+  color: #2563eb;
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -90,8 +95,10 @@ body {
   justify-content: center;
 }
 
-/* ーー★ここまでを差し替え★ーー */
-
+/* 押し心地を良くする設定 */
+.waiting-controls button:active {
+  background: #d1d5db;
+}
 
 .settings {
   display: none;
@@ -158,7 +165,8 @@ body {
   gap: 10px;
 }
 
-button {
+/* 下部のタイマーカード内の通常ボタン設定 */
+.timer-card button {
   border: none;
   border-radius: 16px;
   padding: 14px;
@@ -222,6 +230,23 @@ button {
   margin-top: 0;
 }
 
+/* 新しく追加：計算モーダル用のスタイル */
+.calc-input {
+  width: 100px;
+  font-size: 24px;
+  padding: 8px;
+  text-align: center;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  margin: 10px 0;
+}
+.calc-result {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2563eb;
+  margin: 15px 0;
+}
+
 </style>
 </head>
 
@@ -230,6 +255,7 @@ button {
 <div class="top-bar" style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; width: 100%; box-sizing: border-box;">
   <button class="settings-button" id="settingsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">⚙️</button>
   <button class="settings-button" id="statsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">📊</button>
+  <button class="settings-button" id="calcButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0; background: #e0f2fe; border: 1px solid #bae6fd;">🔢</button>
 
   <div class="status-bar" style="display: flex; flex-direction: row; gap: 8px; align-items: center; flex-grow: 1; width: auto;">
     <div id="waitingCountDisplay">待ち 0組</div>
@@ -240,15 +266,14 @@ button {
     </div>
 
     <div id="nextWaitTime">次の待ち時間 : 0分</div>
-
-　　  <div style="flex-grow: 1; background: transparent; box-shadow: none; height: auto; padding: 0; margin: 0;"></div>
+    
+    <div style="flex-grow: 1; background: transparent; box-shadow: none; height: auto; padding: 0; margin: 0;"></div>
 
     <div id="runningCount">空席 0</div>
     <div id="warningCount">残り20分 0</div>
     <div id="finishedCount">残り10分 0</div>
   </div>
 </div>
-
 
 <div class="settings" id="settingsPanel">
   <h2>グループ設定</h2>
@@ -312,6 +337,27 @@ button {
     <h2>📊 体験人数集計</h2>
     <div id="statsContent"></div>
     <button class="clear-btn" id="closeStats" style="width: 100%; padding: 12px; font-size:16px; margin-top: 15px;">
+      閉じる
+    </button>
+  </div>
+</div>
+
+<div id="calcModal" class="modal">
+  <div class="modal-content" style="text-align: center; max-width: 400px;">
+    <h2>🔢 待ち時間シミュレーター</h2>
+    <p style="font-size: 14px; color: #555; margin-bottom: 15px;">整理券を配る時などの目安計算にどうぞ</p>
+    
+    <div style="margin: 20px 0;">
+      <label style="font-weight: bold; font-size: 16px;">調べたい待ち組数：</label><br>
+      <input type="number" id="calcInputTarget" class="calc-input" value="1" min="1"> <span style="font-size: 20px; font-weight: bold;">組目</span>
+    </div>
+
+    <div style="background: #f0fdf4; padding: 15px; border-radius: 16px; border: 1px solid #bbf7d0;">
+      <div style="font-size: 14px; font-weight: bold; color: #16a34a;">予測される待ち時間</div>
+      <div id="calcResultDisplay" class="calc-result">約 0 分</div>
+    </div>
+
+    <button class="clear-btn" id="closeCalc" style="width: 100%; padding: 12px; font-size:16px; margin-top: 20px;">
       閉じる
     </button>
   </div>
@@ -441,7 +487,6 @@ function createTimers() {
       if (timer.running) return;
 
       if (waitingList.length > 0) {
-        // ★変更：待ちがすでにいる場合は、待ち登録の時点で集計済みなので、ここでは集計をせずただ開始するだけ
         waitingList.shift();
         waitingCount = waitingList.length;
         localStorage.setItem('waitingList', JSON.stringify(waitingList));
@@ -485,7 +530,6 @@ function createTimers() {
   sortTimers();
 }
 
-// ★新しく変更：待ちから案内するとき専用（集計をスキップしてタイマーを回す）
 function startTimerOnly(timer) {
   timer.running = true;
   timer.startedAt = Date.now();
@@ -496,13 +540,11 @@ function startTimerOnly(timer) {
   updateCard(timer);
 }
 
-// ★直接来店したとき専用（その場で集計してタイマーを回す）
 function startTimerWithPeople(timer, peopleCount) {
-  addCountToStats(peopleCount); // 集計に加算
-  startTimerOnly(timer);        // タイマー開始
+  addCountToStats(peopleCount);
+  startTimerOnly(timer);
 }
 
-// ★新しく追加：集計データ（stats）に加算する共通処理
 function addCountToStats(peopleCount) {
   const nowHour = new Date().getHours();
   stats.totalGroups = (stats.totalGroups || 0) + 1;
@@ -517,15 +559,13 @@ function addCountToStats(peopleCount) {
 
 function selectPeople(num) {
   if (currentAction === 'addWaiting') {
-    // ★変更点：「＋」で待ちを登録した瞬間に、リストに追加すると同時に集計(stats)へカウント！
     waitingList.push(num);
     waitingCount = waitingList.length;
     localStorage.setItem('waitingList', JSON.stringify(waitingList));
     localStorage.setItem('waitingCount', waitingCount);
     
-    addCountToStats(num); // 待ち追加の段階で集計へ！
+    addCountToStats(num);
   } else if (currentAction === 'directStart' && currentTargetTimer) {
-    // 直接来店でタイマー開始の場合（今まで通りその場で集計）
     startTimerWithPeople(currentTargetTimer, num);
   }
   
@@ -619,6 +659,34 @@ function updateStatusCounts() {
   document.getElementById('nextWaitTime').textContent = `次の待ち時間 : ${nextWaitMinutes}分`;
 }
 
+// ★新しく追加：指定した組数をもとに「現在の稼働タイマー」から残り時間を割り出すロジック
+function calculateCustomWait(targetCount) {
+  const stopped = timers.filter(t => !t.running).length;
+  
+  // もし空席が調べたい組数以上あれば、待ち時間は0分
+  if (stopped >= targetCount) {
+    return 0;
+  }
+
+  const activeTimers = timers
+    .filter(t => t.running && t.seconds > 0)
+    .sort((a,b) => a.seconds - b.seconds);
+
+  if (activeTimers.length === 0) {
+    return 0;
+  }
+
+  // 空席を引いた、実際に待つ必要がある仮想の順番
+  const effectiveWaitCount = targetCount - stopped - 1; 
+
+  const cycle = Math.floor(effectiveWaitCount / activeTimers.length);
+  const position = effectiveWaitCount % activeTimers.length;
+  const waitSeconds = activeTimers[position].seconds + (cycle * 1800);
+  
+  return Math.ceil(waitSeconds / 60);
+}
+
+// リアルタイム更新ループ
 setInterval(()=>{
   timers.forEach(timer=>{
     if (timer.running) {
@@ -630,6 +698,13 @@ setInterval(()=>{
   });
   saveTimers();
   updateStatusCounts();
+  
+  // 計算機が開いている時は、計算結果も1秒ごとに最新タイマー基準で再計算
+  if (document.getElementById('calcModal').style.display === 'block') {
+    const inputVal = Number(document.getElementById('calcInputTarget').value) || 1;
+    const resultMins = calculateCustomWait(inputVal);
+    document.getElementById('calcResultDisplay').textContent = `約 ${resultMins} 分`;
+  }
 }, 1000);
 
 document.getElementById('settingsButton').onclick = ()=>{
@@ -685,10 +760,10 @@ bindGroupSettings('blue');
 document.getElementById('statsButton').onclick = () => {
   const statsContent = document.getElementById('statsContent');
   let html = `
-    <p><strong>累計:</strong> ${stats.totalGroups || 0} 組 / ${stats.totalPeople || 0} 人</p>
+    <p><strong>累計来店:</strong> ${stats.totalGroups || 0} 組 / ${stats.totalPeople || 0} 人</p>
     <p style="font-size:14px; color:#666;">（1組あたりの平均: ${stats.totalGroups ? Math.round((stats.totalPeople / stats.totalGroups) * 10) / 10 : 0} 人）</p>
     <hr>
-    <h3>時間帯別の集計</h3>
+    <h3>時間帯別の来店集計</h3>
     <table style="width:100%; border-collapse: collapse; margin-top:10px; font-size:15px;">
       <thead>
         <tr style="background:#eee; text-align:left;">
@@ -750,6 +825,26 @@ document.getElementById('closePeopleModal').onclick = () => {
   document.getElementById('peopleModal').style.display = 'none';
   currentAction = null;
   currentTargetTimer = null;
+};
+
+// ★新しく追加：計算機ボタンのクリックイベント
+document.getElementById('calcButton').onclick = () => {
+  // 開いたときに現在の待ち組数＋1（次の人の目安）を初期値として入れておく
+  document.getElementById('calcInputTarget').value = waitingCount + 1;
+  const initialMins = calculateCustomWait(waitingCount + 1);
+  document.getElementById('calcResultDisplay').textContent = `約 ${initialMins} 分`;
+  document.getElementById('calcModal').style.display = 'block';
+};
+
+// 入力フォームの値が変わるたびに即時計算
+document.getElementById('calcInputTarget').oninput = (e) => {
+  const val = Number(e.target.value) || 1;
+  const mins = calculateCustomWait(val);
+  document.getElementById('calcResultDisplay').textContent = `約 ${mins} 分`;
+};
+
+document.getElementById('closeCalc').onclick = () => {
+  document.getElementById('calcModal').style.display = 'none';
 };
 
 createTimers();
