@@ -26,150 +26,223 @@ html, body {
 
 body {
   padding: 16px;
+  box-sizing: border-box;
 }
 
+/* ヘッダー全体を両端揃えにするためのコンテナ */
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom:20px;
+  margin-bottom: 20px; /* 下との隙間を少し広げました */
+  width: 100%;
+  box-sizing: border-box;
+  gap: 10px;
 }
 
+/* ボタンサイズを42pxから52pxに大きくしました */
 .settings-button {
-  width: 60px;
-  height: 60px;
-  border:none;
-  border-radius:50%;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
   background: white;
-  font-size:28px;
-  cursor:pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-size: 24px; /* 絵文字も大きく */
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
+/* ステータス要素を横いっぱいに広げて両端を揃える */
 .status-bar {
-  display:flex;
-  flex-direction:row;
-  gap:14px;
-  align-items:center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
-/* 上部ステータスバーの全パーツ共通のベースデザイン */
-.status-bar div, #nextWaitTime, .waiting-controls {
+/* 各ステータスの高さを42pxから52pxに大きくしました */
+.status-bar div, #nextWaitTime, .waiting-controls, .mail-controls {
   background: white;
-  height: 46px;                  /* 縦幅をコンパクトに調整 */
+  height: 52px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* 個別の微調整 */
 .status-bar div, #nextWaitTime {
-  padding: 0 14px;
+  padding: 0 16px; /* 左右の余白を少し広げました */
   font-weight: bold;
-  font-size: 18px;
+  font-size: 17px; /* 文字を少し大きく */
   white-space: nowrap;
 }
 
-/* ＋－ボタンを包む白い枠組み */
-.waiting-controls {
+.waiting-controls, .mail-controls {
   padding: 0 6px;
   gap: 6px;
 }
 
-/* ＋とーのボタン自体のデザイン */
-.waiting-controls button {
-  width: 34px;
-  height: 34px;
-  font-size: 20px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
-  background: #e5e7eb;
-  color: #2563eb;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* 待ちボタンの余白をリセット（次の待ち時間と密着させるため） */
+.waiting-controls {
+  margin-right: 0;
 }
 
-/* 押し心地を良くする設定 */
-.waiting-controls button:active {
-  background: #d1d5db;
+/* 次の待ち時間の右側に大きな余白を作ることで、左側の3つを一塊にして左寄せにする */
+#nextWaitTime {
+  margin-right: auto;
+}
+
+/* 移動中のコントロールの余白をリセット */
+.mail-controls {
+  margin-right: 0;
+}
+
+/* コントロール内のボタンも押しやすく大きく変更 */
+.waiting-controls button, .mail-controls button {
+  height: 40px; /* 32pxから40pxへ大きく */
+  font-size: 15px; /* 文字を少し大きく */
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.waiting-controls button.circle-btn, .mail-controls button.circle-btn {
+  width: 40px; /* 丸ボタンもサイズアップ */
+  padding: 0;
+  border-radius: 50%;
+  font-size: 22px; /* ＋－を大きく */
+}
+
+.waiting-controls button {
+  background: #e5e7eb;
+  color: #2563eb;
+}
+.waiting-controls button:active { background: #d1d5db; }
+
+.btn-mail-sent { background: #ffedd5; color: #ea580c; }
+.btn-mail-cancel { background: #fee2e2; color: #dc2626; }
+
+/* 看板を右端に寄せてきれいに収める（高さ52pxに合わせて調整） */
+.call-guide-banner {
+  background: #f0fdf4;
+  border: 2px dashed #16a34a;
+  color: #166534;
+  font-size: 17px; /* 文字を大きく */
+  font-weight: bold;
+  padding: 0 16px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  height: 52px; /* 高さを52pxに */
+  box-sizing: border-box;
+  flex-grow: 1;
+  justify-content: center;
+  max-width: 260px; /* 少し最大横幅を広げました */
+}
+.call-guide-banner.highlight {
+  background: #fff7ed;
+  border-color: #f97316;
+  color: #c2410c;
+  animation: pulseBg 2s infinite;
+}
+@keyframes pulseBg {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+  100% { transform: scale(1); }
 }
 
 .settings {
   display: none;
   background: white;
-  border-radius: 24px;
-  padding: 20px;
-  margin-bottom: 20px;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .group-card {
   background: #f5f5f5;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
 }
 
 .group-card h3 {
   margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .group-inputs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .group-inputs input {
-  width: 70px;
-  padding: 8px;
-  border-radius: 10px;
+  width: 60px;
+  padding: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
 
+/* 📱 【4個バージョンに変更！】1列に4個がきれいに収まるグリッド設定 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
 }
 
+/* タイマーカードのサイズ調整（画像と同じ大きさに変更） */
 .timer-card {
-  border-radius: 24px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px 16px;
   color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
 }
 
 .timer-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .time {
-  font-size: 48px;
+  font-size: 54px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   font-weight: bold;
 }
 
 .buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* 下部のタイマーカード内の通常ボタン設定 */
 .timer-card button {
   border: none;
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: 12px;
+  padding: 14px 4px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
@@ -218,38 +291,38 @@ body {
 .modal-content {
   background: white;
   width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 20px;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 16px;
+  border-radius: 16px;
   color: black;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
 .modal-content h2 {
   margin-top: 0;
+  font-size: 20px;
 }
 
-/* シミュレーター用のデザイン調整 */
 .calc-display-box {
   background: #f3f4f6;
-  border-radius: 16px;
-  padding: 12px;
-  font-size: 28px;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 24px;
   font-weight: bold;
   color: #1f2937;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   display: inline-block;
-  min-width: 120px;
+  min-width: 100px;
   text-align: center;
   border: 2px solid #e5e7eb;
 }
 
 .calc-result {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
   color: #2563eb;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 </style>
@@ -257,26 +330,28 @@ body {
 
 <body>
 
-<div class="top-bar" style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; width: 100%; box-sizing: border-box;">
-  <button class="settings-button" id="settingsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">⚙️</button>
-  <button class="settings-button" id="statsButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0;">📊</button>
-  <button class="settings-button" id="calcButton" style="width: 46px; height: 46px; font-size: 20px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0; background: #e0f2fe; border: 1px solid #bae6fd;">🔢</button>
+<div class="top-bar">
+  <button class="settings-button" id="settingsButton">⚙️</button>
+  <button class="settings-button" id="statsButton">📊</button>
+  <button class="settings-button" id="calcButton" style="background: #e0f2fe; border: 1px solid #bae6fd;">🔢</button>
 
-  <div class="status-bar" style="display: flex; flex-direction: row; gap: 8px; align-items: center; flex-grow: 1; width: auto;">
+  <div class="status-bar">
     <div id="waitingCountDisplay">待ち 0組</div>
-    
     <div class="waiting-controls">
-      <button id="addWaiting">＋</button>
-      <button id="removeWaiting">－</button>
+      <button id="addWaiting" class="circle-btn">＋</button>
+      <button id="removeWaiting" class="circle-btn">－</button>
     </div>
 
     <div id="nextWaitTime">次の待ち時間 : 0分</div>
-    
-    <div style="flex-grow: 1; background: transparent; box-shadow: none; height: auto; padding: 0; margin: 0;"></div>
 
-    <div id="runningCount">空席 0</div>
-    <div id="warningCount">残り20分 0</div>
-    <div id="finishedCount">残り10分 0</div>
+    <div id="transitCountDisplay" style="background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5;">移動中 0組</div>
+    <div class="mail-controls">
+      <button id="sendMailAction" class="btn-mail-sent">✉️ 呼び出し済</button>
+      <button id="cancelMailAction" class="btn-mail-cancel circle-btn">－</button>
+    </div>
+   
+  
+    <div id="callGuideDisplay" class="call-guide-banner">✉️：待機中</div>
   </div>
 </div>
 
@@ -301,7 +376,8 @@ body {
   </div>
 
   <div class="group-card">
-    <h3>グループ3</h3>
+    
+ <h3>グループ3</h3>
     <div class="group-inputs">
       <input type="number" id="green-start">
       <input type="number" id="green-end">
@@ -320,20 +396,32 @@ body {
 </div>
 
 <div id="peopleModal" class="modal">
-  <div class="modal-content" style="text-align: center; max-width: 400px;">
+  <div class="modal-content" style="text-align: center;
+ max-width: 360px;">
     <h2 id="peopleModalTitle">人数を選択してください</h2>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
-      <button class="five-btn" onclick="selectPeople(1)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">1</button>
-      <button class="five-btn" onclick="selectPeople(2)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">2</button>
-      <button class="five-btn" onclick="selectPeople(3)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">3</button>
-      <button class="five-btn" onclick="selectPeople(4)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">4</button>
-      <button class="five-btn" onclick="selectPeople(5)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">5</button>
-      <button class="five-btn" onclick="selectPeople(6)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">6</button>
-      <button class="five-btn" onclick="selectPeople(7)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">7</button>
-      <button class="five-btn" onclick="selectPeople(8)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">8</button>
-      <button class="five-btn" onclick="selectPeople(9)" style="color:black; font-size:24px; padding:20px; font-weight:bold;">9</button>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+ margin: 16px 0;">
+      <button class="five-btn" onclick="selectPeople(1)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">1</button>
+      <button class="five-btn" onclick="selectPeople(2)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">2</button>
+      <button class="five-btn" onclick="selectPeople(3)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">3</button>
+      <button class="five-btn" onclick="selectPeople(4)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">4</button>
+      <button class="five-btn" onclick="selectPeople(5)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">5</button>
+      <button class="five-btn" onclick="selectPeople(6)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">6</button>
+      <button class="five-btn" onclick="selectPeople(7)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">7</button>
+      <button class="five-btn" onclick="selectPeople(8)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">8</button>
+      <button class="five-btn" onclick="selectPeople(9)" style="color:black; font-size:20px; padding:14px;
+ font-weight:bold;">9</button>
     </div>
-    <button class="clear-btn" id="closePeopleModal" style="width: 100%; padding: 12px; font-size:16px;">キャンセル</button>
+    <button class="clear-btn" id="closePeopleModal" style="width: 100%; padding: 10px;
+ font-size:14px;">キャンセル</button>
   </div>
 </div>
 
@@ -341,43 +429,63 @@ body {
   <div class="modal-content">
     <h2>📊 体験人数集計</h2>
     <div id="statsContent"></div>
-    <button class="clear-btn" id="closeStats" style="width: 100%; padding: 12px; font-size:16px; margin-top: 15px;">
+    <button class="clear-btn" id="closeStats" style="width: 100%;
+ padding: 10px; font-size:14px; margin-top: 12px;">
       閉じる
     </button>
   </div>
 </div>
 
 <div id="calcModal" class="modal">
-  <div class="modal-content" style="text-align: center; max-width: 400px;">
+  <div class="modal-content" style="text-align: center;
+ max-width: 360px;">
     <h2>🔢 待ち時間シミュレーター</h2>
-    <p style="font-size: 14px; color: #555; margin-bottom: 10px;">調べたい「組数」を下のボタンで入力してください</p>
+    <p style="font-size: 13px; color: #555;
+ margin-bottom: 8px;">調べたい「組数」を入力してください</p>
     
     <div>
       <div id="calcInputDisplay" class="calc-display-box">1</div>
-      <span style="font-size: 22px; font-weight: bold; margin-left: 8px;">組目</span>
+      <span style="font-size: 18px;
+ font-weight: bold; margin-left: 6px;">組目</span>
     </div>
 
-    <div style="background: #f0fdf4; padding: 12px; border-radius: 16px; border: 1px solid #bbf7d0; margin-bottom: 15px;">
-      <div style="font-size: 14px; font-weight: bold; color: #16a34a;">予測される待ち時間</div>
+    <div style="background: #f0fdf4; padding: 10px; border-radius: 12px;
+ border: 1px solid #bbf7d0; margin-bottom: 12px;">
+      <div style="font-size: 13px; font-weight: bold;
+ color: #16a34a;">予測される待ち時間</div>
       <div id="calcResultDisplay" class="calc-result">約 0 分</div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px;">
-      <button class="five-btn" onclick="pressCalcNum(1)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">1</button>
-      <button class="five-btn" onclick="pressCalcNum(2)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">2</button>
-      <button class="five-btn" onclick="pressCalcNum(3)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">3</button>
-      <button class="five-btn" onclick="pressCalcNum(4)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">4</button>
-      <button class="five-btn" onclick="pressCalcNum(5)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">5</button>
-      <button class="five-btn" onclick="pressCalcNum(6)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">6</button>
-      <button class="five-btn" onclick="pressCalcNum(7)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">7</button>
-      <button class="five-btn" onclick="pressCalcNum(8)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">8</button>
-      <button class="five-btn" onclick="pressCalcNum(9)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">9</button>
-      <button class="clear-btn" onclick="clearCalcNum()" style="background:#ef4444; color:white; font-size:18px; padding:12px; font-weight:bold;">クリア</button>
-      <button class="five-btn" onclick="pressCalcNum(0)" style="color:black; font-size:22px; padding:12px; font-weight:bold;">0</button>
-      <button class="clear-btn" onclick="backspaceCalcNum()" style="background:#f59e0b; color:white; font-size:18px; padding:12px; font-weight:bold;">⌫ 戻る</button>
+    <div style="display: grid;
+ grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
+      <button class="five-btn" onclick="pressCalcNum(1)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">1</button>
+      <button class="five-btn" onclick="pressCalcNum(2)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">2</button>
+      <button class="five-btn" onclick="pressCalcNum(3)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">3</button>
+      <button class="five-btn" onclick="pressCalcNum(4)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">4</button>
+      <button class="five-btn" onclick="pressCalcNum(5)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">5</button>
+      <button class="five-btn" onclick="pressCalcNum(6)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">6</button>
+      <button class="five-btn" onclick="pressCalcNum(7)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">7</button>
+      <button class="five-btn" onclick="pressCalcNum(8)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">8</button>
+      <button class="five-btn" onclick="pressCalcNum(9)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">9</button>
+      <button class="clear-btn" onclick="clearCalcNum()" style="background:#ef4444; color:white; font-size:15px; padding:10px;
+ font-weight:bold;">クリア</button>
+      <button class="five-btn" onclick="pressCalcNum(0)" style="color:black; font-size:18px; padding:10px;
+ font-weight:bold;">0</button>
+      <button class="clear-btn" onclick="backspaceCalcNum()" style="background:#f59e0b; color:white; font-size:15px; padding:10px;
+ font-weight:bold;">⌫ 戻る</button>
     </div>
 
-    <button class="clear-btn" id="closeCalc" style="width: 100%; padding: 12px; font-size:16px;">
+    <button class="clear-btn" id="closeCalc" style="width: 100%; padding: 10px;
+ font-size:14px;">
       閉じる
     </button>
   </div>
@@ -387,26 +495,18 @@ body {
 
 <script>
 
-let stats =
-JSON.parse(
-  localStorage.getItem('stats')
-) ||
-{
-  totalGroups: 0,
-  totalPeople: 0,
-  hourly: {}
-};
+let stats = JSON.parse(localStorage.getItem('stats')) || { totalGroups: 0, totalPeople: 0, hourly: {} };
 
 const INITIAL_SECONDS = 30 * 60;
+
 let waitingList = JSON.parse(localStorage.getItem('waitingList')) || [];
 let waitingCount = waitingList.length;
 
-const timers =
-JSON.parse(localStorage.getItem('timers')) ||
-[];
+let transitHistory = JSON.parse(localStorage.getItem('transitHistory')) || [];
 
-const groups =
-JSON.parse(localStorage.getItem('groups')) || {
+const timers = JSON.parse(localStorage.getItem('timers')) || [];
+
+const groups = JSON.parse(localStorage.getItem('groups')) || {
   red: { start: 1, end: 5, color: '#FF5D52' },
   yellow: { start: 6, end: 9, color: '#FFA703' },
   green: { start: 10, end: 14, color: '#4CAF50' },
@@ -416,9 +516,15 @@ JSON.parse(localStorage.getItem('groups')) || {
 let currentAction = null; 
 let currentTargetTimer = null;
 
-// シミュレーターの入力数値を保持する内部変数
 let calcInputString = "1";
-let isFirstInput = true; // 開いた直後の入力を上書きするためのフラグ
+let isFirstInput = true; 
+
+function getMailCallAvailableCount() {
+  const stopped = timers.filter(t => !t.running).length;
+  const twentyMinutes = timers.filter(t => t.running && t.seconds <= 1200).length;
+  let currentTransitCount = transitHistory.length;
+  return (stopped + twentyMinutes) - (waitingCount + currentTransitCount);
+}
 
 function saveGroups() {
   localStorage.setItem('groups', JSON.stringify(groups));
@@ -515,7 +621,6 @@ function createTimers() {
         waitingCount = waitingList.length;
         localStorage.setItem('waitingList', JSON.stringify(waitingList));
         localStorage.setItem('waitingCount', waitingCount);
-        
         startTimerWithPeople(timer, peopleCount);
       } else {
         currentAction = 'directStart';
@@ -581,8 +686,16 @@ function selectPeople(num) {
     waitingCount = waitingList.length;
     localStorage.setItem('waitingList', JSON.stringify(waitingList));
     localStorage.setItem('waitingCount', waitingCount);
+    if (transitHistory.length > 0) {
+      transitHistory.shift();
+      localStorage.setItem('transitHistory', JSON.stringify(transitHistory));
+    }
   } else if (currentAction === 'directStart' && currentTargetTimer) {
     startTimerWithPeople(currentTargetTimer, num);
+    if (transitHistory.length > 0) {
+      transitHistory.shift();
+      localStorage.setItem('transitHistory', JSON.stringify(transitHistory));
+    }
   }
   
   document.getElementById('peopleModal').style.display = 'none';
@@ -594,19 +707,16 @@ function selectPeople(num) {
 function sortTimers() {
   const grid = document.getElementById('timerGrid');
   const cards = Array.from(document.querySelectorAll('.timer-card'));
-
   const runningCards = cards.filter(c => {
     const id = Number(c.id.replace('card-', ''));
     const t = timers.find(timer => timer.id === id);
     return t.running;
   });
-
   const stoppedCards = cards.filter(c => {
     const id = Number(c.id.replace('card-', ''));
     const t = timers.find(timer => timer.id === id);
     return !t.running;
   });
-
   runningCards.sort((a,b)=>{
     const aId = Number(a.id.replace('card-', ''));
     const bId = Number(b.id.replace('card-', ''));
@@ -614,13 +724,11 @@ function sortTimers() {
     const bTimer = timers.find(t=>t.id===bId);
     return aTimer.startedAt - bTimer.startedAt;
   });
-
   stoppedCards.sort((a,b)=>{
     const aId = Number(a.id.replace('card-', ''));
     const bId = Number(b.id.replace('card-', ''));
     return bId - aId;
   });
-
   [...runningCards, ...stoppedCards].forEach(card=>{
     grid.appendChild(card);
   });
@@ -629,7 +737,6 @@ function sortTimers() {
 function updateCard(timer) {
   const card = document.getElementById(`card-${timer.id}`);
   const time = document.getElementById(`time-${timer.id}`);
-  
   card.classList.remove('blink-yellow', 'blink-red');
 
   if (timer.seconds <= 360 && timer.seconds >= 60 && !timer.acknowledged) {
@@ -644,21 +751,27 @@ function updateCard(timer) {
 }
 
 function updateStatusCounts() {
-  const stopped = timers.filter(t => !t.running).length;
-  const twentyMinutes = timers.filter(t => t.running && t.seconds <= 1200).length;
-  const tenMinutes = timers.filter(t => t.running && t.seconds <= 600).length;
+  let currentTransitCount = transitHistory.length;
 
-  document.getElementById('runningCount').textContent = `空席 : ${stopped}`;
-  document.getElementById('warningCount').textContent = `残り20分 : ${twentyMinutes}`;
-  document.getElementById('finishedCount').textContent = `残り10分 : ${tenMinutes}`;
   document.getElementById('waitingCountDisplay').textContent = `待ち ${waitingCount}組`;
+  document.getElementById('transitCountDisplay').textContent = `移動中 ${currentTransitCount}組`;
+
+  let mailCallAvailable = getMailCallAvailableCount();
+  const guideBanner = document.getElementById('callGuideDisplay');
+
+  if (mailCallAvailable > 0) {
+    guideBanner.textContent = `✉️：【 ${mailCallAvailable}組 】呼び出し！`;
+    guideBanner.classList.add('highlight');
+  } else {
+    guideBanner.textContent = `✉️：待機中`;
+    guideBanner.classList.remove('highlight');
+  }
 
   const activeTimers = timers
     .filter(t => t.running && t.seconds > 0)
     .sort((a,b) => a.seconds - b.seconds);
-
   let nextWaitMinutes = 0;
-
+  const stopped = timers.filter(t => !t.running).length;
   if (waitingCount > 0 || (stopped === 0 && activeTimers.length > 0)) {
     if (activeTimers.length === 0) {
       nextWaitMinutes = 0;
@@ -683,29 +796,42 @@ function calculateCustomWait(targetCount) {
   const activeTimers = timers
     .filter(t => t.running && t.seconds > 0)
     .sort((a,b) => a.seconds - b.seconds);
-
   if (activeTimers.length === 0) {
     return 0;
   }
-  const effectiveWaitCount = targetCount - stopped - 1; 
+  const effectiveWaitCount = targetCount - stopped - 1;
   const cycle = Math.floor(effectiveWaitCount / activeTimers.length);
   const position = effectiveWaitCount % activeTimers.length;
   const waitSeconds = activeTimers[position].seconds + (cycle * 1800);
-  
   return Math.ceil(waitSeconds / 60);
 }
 
-// リアルタイム更新ループ
 setInterval(()=>{
+  const now = Date.now();
+
   timers.forEach(timer=>{
     if (timer.running) {
-      const now = Date.now();
-      const remaining = Math.floor((timer.endAt - now) / 1000);
-      timer.seconds = remaining;
+      timer.seconds = Math.floor((timer.endAt - now) / 1000);
       updateCard(timer);
     }
   });
   saveTimers();
+
+  let expiredCount = 0;
+  transitHistory = transitHistory.filter(timestamp => {
+    const elapsedSeconds = (now - timestamp) / 1000;
+    if (elapsedSeconds >= 1800) {
+      expiredCount++;
+      return false; 
+    }
+    return true;
+  });
+  
+
+  if (expiredCount > 0) {
+    localStorage.setItem('transitHistory', JSON.stringify(transitHistory));
+  }
+
   updateStatusCounts();
   
   if (document.getElementById('calcModal').style.display === 'block') {
@@ -748,14 +874,31 @@ document.getElementById('addWaiting').onclick = () => {
   document.getElementById('peopleModalTitle').textContent = "お待ちになる人数";
   document.getElementById('peopleModal').style.display = 'block';
 };
-
 document.getElementById('removeWaiting').onclick = () => {
   if (waitingList.length > 0) {
     waitingList.pop();
     waitingCount = waitingList.length;
-
     localStorage.setItem('waitingList', JSON.stringify(waitingList));
     localStorage.setItem('waitingCount', waitingCount);
+    updateStatusCounts();
+  }
+};
+
+document.getElementById('sendMailAction').onclick = () => {
+  let mailCallAvailable = getMailCallAvailableCount();
+  let sendCount = mailCallAvailable > 0 ? mailCallAvailable : 1;
+  const now = Date.now();
+  for (let i = 0; i < sendCount; i++) {
+    transitHistory.push(now);
+  }
+
+  localStorage.setItem('transitHistory', JSON.stringify(transitHistory));
+  updateStatusCounts();
+};
+document.getElementById('cancelMailAction').onclick = () => {
+  if (transitHistory.length > 0) {
+    transitHistory.shift();
+    localStorage.setItem('transitHistory', JSON.stringify(transitHistory));
     updateStatusCounts();
   }
 };
@@ -768,16 +911,16 @@ bindGroupSettings('blue');
 document.getElementById('statsButton').onclick = () => {
   const statsContent = document.getElementById('statsContent');
   let html = `
-    <p><strong>累計来店:</strong> ${stats.totalGroups || 0} 組 / ${stats.totalPeople || 0} 人</p>
-    <p style="font-size:14px; color:#666;">（1組あたりの平均: ${stats.totalGroups ? Math.round((stats.totalPeople / stats.totalGroups) * 10) / 10 : 0} 人）</p>
+    <p><strong>累計:</strong> ${stats.totalGroups || 0} 組 / ${stats.totalPeople || 0} 人</p>
+    <p style="font-size:13px; color:#666;">（1組あたりの平均: ${stats.totalGroups ? Math.round((stats.totalPeople / stats.totalGroups) * 10) / 10 : 0} 人）</p>
     <hr>
-    <h3>時間帯別の来店集計</h3>
-    <table style="width:100%; border-collapse: collapse; margin-top:10px; font-size:15px;">
+    <h3>時間帯別の集計</h3>
+    <table style="width:100%; border-collapse: collapse; margin-top:8px; font-size:14px;">
       <thead>
         <tr style="background:#eee; text-align:left;">
-          <th style="padding:8px; border:1px solid #ccc;">時間帯</th>
-          <th style="padding:8px; border:1px solid #ccc;">組数</th>
-          <th style="padding:8px; border:1px solid #ccc;">人数</th>
+          <th style="padding:6px; border:1px solid #ccc;">時間帯</th>
+          <th style="padding:6px; border:1px solid #ccc;">組数</th>
+          <th style="padding:6px; border:1px solid #ccc;">人数</th>
         </tr>
       </thead>
       <tbody>
@@ -790,25 +933,24 @@ document.getElementById('statsButton').onclick = () => {
       hasData = true;
       const gCount = typeof data === 'number' ? data : (data.groups || 0);
       const pCount = typeof data === 'number' ? data * 2 : (data.people || 0);
-
       html += `
         <tr>
-          <td style="padding:8px; border:1px solid #ccc;">${h}時 〜 ${h+1}時</td>
-          <td style="padding:8px; border:1px solid #ccc;">${gCount} 組</td>
-          <td style="padding:8px; border:1px solid #ccc;">${pCount} 人</td>
+          <td style="padding:6px; border:1px solid #ccc;">${h}時 〜 ${h+1}時</td>
+          <td style="padding:6px; border:1px solid #ccc;">${gCount} 組</td>
+          <td style="padding:6px; border:1px solid #ccc;">${pCount} 人</td>
         </tr>
       `;
     }
   }
 
   if (!hasData) {
-    html += `<tr><td colspan="3" style="padding:8px; border:1px solid #ccc; text-align:center; color:#999;">本日のデータはありません</td></tr>`;
+    html += `<tr><td colspan="3" style="padding:6px; border:1px solid #ccc; text-align:center; color:#999;">本日のデータはありません</td></tr>`;
   }
 
   html += `
       </tbody>
     </table>
-    <button id="resetStats" style="background:#ff4d4d; color:white; margin-top:20px; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">
+    <button id="resetStats" style="background:#ff4d4d; color:white; margin-top:16px; width:100%; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer;">
       データをリセットする
     </button>
   `;
@@ -828,14 +970,12 @@ document.getElementById('statsButton').onclick = () => {
 document.getElementById('closeStats').onclick = () => {
   document.getElementById('statsModal').style.display = 'none';
 };
-
 document.getElementById('closePeopleModal').onclick = () => {
   document.getElementById('peopleModal').style.display = 'none';
   currentAction = null;
   currentTargetTimer = null;
 };
 
-/* 画面タッチ用の数字入力処理（2桁以上の電卓入力に対応） */
 function updateCalcScreen() {
   document.getElementById('calcInputDisplay').textContent = calcInputString === "" ? "0" : calcInputString;
   
@@ -845,7 +985,6 @@ function updateCalcScreen() {
 }
 
 function pressCalcNum(num) {
-  // 開いた直後の最初の1タップ目は、初期値を上書きする
   if (isFirstInput) {
     calcInputString = String(num);
     isFirstInput = false;
@@ -853,7 +992,6 @@ function pressCalcNum(num) {
     if (calcInputString === "0") {
       calcInputString = String(num);
     } else {
-      // 最大3桁（999組）までに制限
       if (calcInputString.length < 3) {
         calcInputString += String(num);
       }
@@ -879,13 +1017,11 @@ function backspaceCalcNum() {
 }
 
 document.getElementById('calcButton').onclick = () => {
-  // 開いたときは「現在の待ち組数 + 1」を自動セット
   calcInputString = String(waitingCount + 1);
-  isFirstInput = true; // 新規入力待ち状態にする
+  isFirstInput = true; 
   updateCalcScreen();
   document.getElementById('calcModal').style.display = 'block';
 };
-
 document.getElementById('closeCalc').onclick = () => {
   document.getElementById('calcModal').style.display = 'none';
 };
